@@ -4,3 +4,11 @@ node_js:
 script:
   - yarn
   - yarn build
+notifications:
+  slack: estimationtool:bOTvxHaF5GBvP2e6Q2gErCqr
+deploy:
+  provider: heroku
+  api_key: 6eac2a68-903a-4e1d-a05c-c5ac355e5ee2
+  app: estimation-tool-ui
+  on:
+    branch: develop
