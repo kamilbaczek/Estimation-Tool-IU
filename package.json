@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "vue-cli-service serve",
+    "start": "node server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
+    "postinstall": "yarn build"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^22.0.0",
@@ -27,12 +28,14 @@
     "core-js": "^3.7.0",
     "echarts": "^4.9.0",
     "eslint-loader": "^4.0.2",
+    "express": "^4.17.1",
     "firebase": "^8.2.5",
     "leaflet": "^1.7.1",
     "metismenujs": "^1.2.1",
     "qs": "^6.10.1",
     "sass": "^1.30.0",
     "sass-loader": "^10.1.0",
+    "serve-static": "^1.14.1",
     "simplebar-vue": "^1.6.0",
     "sweetalert2": "^10.12.3",
     "v-click-outside": "^3.1.2",
