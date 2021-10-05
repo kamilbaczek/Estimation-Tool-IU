@@ -30,7 +30,12 @@ export default {
   data() {
     return {
       valuationId: "",
-      details: {},
+      inquiryDetails: {
+        information: {
+          fullname: ""
+        }
+      },
+      valuationInformation: {},
       servicesIds: [],
       title: "Valuations",
       items: [
@@ -54,15 +59,30 @@ export default {
       this.$refs["suggest-proposal-modal"].show();
     },
     loadData() {
-      axios
-        .get(`valuations-module/valuations/${this.valuationId}`)
-        .then((res) => {
-          this.details = res.data.valuationDetails;
-          this.servicesIds = res.data.valuationDetails.services.map(
-            (service) => service.serviceId
-          );
-        });
+    axios
+    .get(`valuations-module/valuations/${this.valuationId}`)
+    .then((res) => {
+        this.valuationInformation = res.data.valuationInformation;
+        axios
+          .get(`inquries-module/Inquiries/${this.valuationInformation.inquiryId}`)
+          .then((res) => {
+            this.inquiryDetails = res.data.inquiryDetails;
+            this.servicesIds = res.data.inquiryDetails.services.map(
+              (service) => service.serviceId
+            );
+          });
+          });
     },
+    loadInquiries() {
+    axios
+    .get(`inquiries-module/inquiries/${this.inquiryDetails.information.id}`)
+    .then((res) => {
+      this.inquiryDetails = res.data.inquiryDetails;
+      this.servicesIds = res.data.inquiryDetails.services.map(
+        (service) => service.serviceId
+      );
+    });
+    }
   },
 };
 </script>
@@ -70,16 +90,16 @@ export default {
 <template>
   <Layout>
     <PageHeader :title="title" :items="items" />
-    <div class="row" v-if="details.information">
+    <div class="row" v-if="valuationInformation">
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
             <div class="invoice-title">
               <h4 class="float-end mx-2 font-size-16">
-                <Status :status="details.information.status"></Status>
+                <Status :status="valuationInformation.status"></Status>
               </h4>
               <h4 class="float-end font-size-16">
-                Identifier: <b>{{ details.information.id }}</b>
+                Identifier: <b>{{ valuationInformation.id }}</b>
               </h4>
               <div class="mb-4">
                 <img
@@ -94,22 +114,23 @@ export default {
               <div class="col-6">
                 <strong>From:</strong>
                 <br />
-                {{ details.information.fullName }} <br />{{
-                  details.information.email
+                {{ inquiryDetails.information.fullName }} <br />{{
+                  inquiryDetails.information.email
                 }}
               </div>
               <div class="col-6 text-sm-end">
                 <address>
                   <strong>Requested Date:</strong>
-                  <br />{{ details.information.requestedDate }}
+                  <br />{{ valuationInformation.requestedDate }}
                 </address>
               </div>
             </div>
             <ListServices
+              v-if="servicesIds.length > 0"
               :servicesIds="servicesIds"
-              :clientFullName="details.information.fullName"
+              :clientFullName="inquiryDetails.information.fullName"
             ></ListServices>
-            <History :valuationId="valuationId"></History>
+            <History v-if="valuationId" :valuationId="valuationId"></History>
             <div class="d-print-none">
               <div class="float-end">
                 <a
@@ -137,3 +158,5 @@ export default {
     ></SuggestProposalModal>
   </Layout>
 </template>
+
+

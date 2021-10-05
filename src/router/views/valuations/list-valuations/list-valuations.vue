@@ -38,7 +38,7 @@ export default {
       ],
       fields: [
         {
-          key: "fullName",
+          key: "inquiryId",
           sortable: true,
         },
         {

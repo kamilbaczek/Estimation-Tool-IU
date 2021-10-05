@@ -69,7 +69,7 @@ export default {
             <b-collapse
               :id="index"
               visible
-              accordion="my-accordion"
+              accordion="serivces-accordion"
               role="tabpanel"
             >
               <b-card-body>
