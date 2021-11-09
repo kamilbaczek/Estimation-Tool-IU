@@ -82,7 +82,7 @@ export default {
           sortable: true,
         },
         {
-          key: "category",
+          key: "category.name",
           sortable: true,
         },
         {

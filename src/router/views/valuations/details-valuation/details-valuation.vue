@@ -59,11 +59,16 @@ export default {
       this.$refs["suggest-proposal-modal"].show();
     },
     loadData() {
+    const context = this;
     axios
     .get(`valuations-module/valuations/${this.valuationId}`)
     .then((res) => {
         this.valuationInformation = res.data.valuationInformation;
-        axios
+      context.loadInquiries();
+          });
+    },
+    loadInquiries() {
+      axios
           .get(`inquries-module/Inquiries/${this.valuationInformation.inquiryId}`)
           .then((res) => {
             this.inquiryDetails = res.data.inquiryDetails;
@@ -71,17 +76,6 @@ export default {
               (service) => service.serviceId
             );
           });
-          });
-    },
-    loadInquiries() {
-    axios
-    .get(`inquiries-module/inquiries/${this.inquiryDetails.information.id}`)
-    .then((res) => {
-      this.inquiryDetails = res.data.inquiryDetails;
-      this.servicesIds = res.data.inquiryDetails.services.map(
-        (service) => service.serviceId
-      );
-    });
     }
   },
 };
@@ -99,7 +93,7 @@ export default {
                 <Status :status="valuationInformation.status"></Status>
               </h4>
               <h4 class="float-end font-size-16">
-                Identifier: <b>{{ valuationInformation.id }}</b>
+                Identifier: <b>{{ valuationInformation.valuationId }}</b>
               </h4>
               <div class="mb-4">
                 <img
@@ -121,7 +115,7 @@ export default {
               <div class="col-6 text-sm-end">
                 <address>
                   <strong>Requested Date:</strong>
-                  <br />{{ valuationInformation.requestedDate }}
+                  <br />{{ valuationInformation.requestedDate | date }}
                 </address>
               </div>
             </div>

@@ -5,6 +5,7 @@ import PageHeader from "@/components/page-header";
 import appConfig from "@/app.config";
 import Grid from "@/components/et-grid";
 import Status from "../components/status.vue";
+import DateFormatter from "@/helpers/dates/date-formatter";
 
 export default {
   page: {
@@ -44,6 +45,7 @@ export default {
         {
           key: "requestedDate",
           sortable: true,
+          formatter: (date) => DateFormatter.format(date)
         },
         {
           key: "status",
@@ -85,7 +87,7 @@ export default {
     >
       <template v-slot:actions="data">
         <b-button
-          @click.prevent="goToDetails(data.item.id)"
+          @click.prevent="goToDetails(data.item.valuationId)"
           variant="info"
           class="mx-1"
           title="Go to details"

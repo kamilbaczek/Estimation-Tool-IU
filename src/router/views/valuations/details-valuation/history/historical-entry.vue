@@ -6,7 +6,7 @@
     <div class="media">
       <div class="me-3">
         <h5 class="font-size-14">
-          {{ changeDate }}
+          {{ changeDate | dateTime }}
           <i
             class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2 "
           ></i>
@@ -27,7 +27,7 @@ export default {
 
   props: {
     changeDate: {
-      type: String,
+      type: Date,
       required: true,
     },
     status: {

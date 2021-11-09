@@ -24,6 +24,7 @@ import App from "./App.vue";
 import i18n from "./i18n";
 
 import tinymce from "vue-tinymce-editor";
+import dateFormatter from "./helpers/dates/date-formatter";
 
 //vee-validate
 import { ValidationObserver, ValidationProvider, extend, localize} from "vee-validate";
@@ -67,6 +68,8 @@ Object.keys(rules).forEach(rule => {
 });
 localize("en", en);
 
+Vue.filter('date', dateFormatter.format);
+Vue.filter('dateTime', dateFormatter.formatDateTime);
 
 Vue.config.productionTip = false;
 
