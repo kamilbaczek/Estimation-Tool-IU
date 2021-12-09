@@ -2,6 +2,9 @@
 import axios from "axios";
 
 import i18n from "../i18n";
+import TestEnvBanner from "../components/widgets/test-env/test-ent-banner.vue";
+import QAActionButton from "../components/widgets/test-env/qa-actions-button.vue";
+import { pushNotificationsMethods } from "@/state/helpers";
 
 import simplebar from "simplebar-vue";
 
@@ -44,18 +47,65 @@ export default {
       value: null,
     };
   },
-  components: { simplebar },
+  components: { simplebar, TestEnvBanner ,QAActionButton},
+  computed: {
+    areNotificationsToRead()
+    {
+     return this.notificationsToRead.length > 0
+    },
+    notifications()
+    {
+return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
+    },
+    notificationsToRead() {
+      return this.notifications.filter(notification => notification.markedAsRead === false);
+    },
+  },
   mounted() {
     this.value = this.languages.find((x) => x.language === i18n.locale);
     this.text = this.value.title;
     this.flag = this.value.flag;
+
+    this.$valuationsHub.$on("proposal-approved-event", (event) => {
+      this.$etToast(`Proposal approved ${event.valuationId}`);
+      const route = { name: "details-valuation", params: { id: event.valuationId } };
+        const notification = {
+          valuationId: event.valuationId,
+          text: `Proposal approved`,
+          title: "New valuation",
+          route: route,
+          icon: 'bx bx-trophy',
+          markedAsRead: false,
+          };
+      const push = [...this.notifications,notification];
+     this.addPushNotification(push); 
+        });
+
+    function valuationsHub() {
+      this.$valuationsHub.$on("valuation-requested-event", (event) => {
+        this.$etToast(`Valuation requested ${event.valuationId}`);
+        const route = {name: "details-valuation", params: {id: event.valuationId}};
+        const notification = {
+          valuationId: event.valuationId,
+          text: `Check out new valuation`,
+          title: "New valuation",
+          route: route,
+          icon: 'bx bx-trophy',
+          markedAsRead: false,
+        };
+        const push = [...this.notifications, notification];
+        this.addPushNotification(push);
+      });
+    }
+
+    valuationsHub.call(this);
+  },
+  beforeDestroy: function() {
   },
   methods: {
+    ...pushNotificationsMethods,
     toggleMenu() {
       this.$parent.toggleMenu();
-    },
-    toggleRightSidebar() {
-      this.$parent.toggleRightSidebar();
     },
     initFullScreen() {
       document.body.classList.toggle("fullscreen-enable");
@@ -84,6 +134,12 @@ export default {
         }
       }
     },
+    markAsRead(notification)
+    {
+      notification.markedAsRead = true;
+      this.addPushNotification(this.notifications);
+      this.$router.push(notification.route)
+    },
     setLanguage(locale, country, flag) {
       this.lan = locale;
       this.text = country;
@@ -104,6 +160,7 @@ export default {
 
 <template>
   <header id="page-topbar">
+    <TestEnvBanner/>
     <div class="navbar-header">
       <div class="d-flex">
         <!-- LOGO -->
@@ -220,10 +277,8 @@ export default {
           variant="black"
         >
           <template v-slot:button-content>
-            <i class="bx bx-bell bx-tada"></i>
-            <span class="badge bg-danger rounded-pill">{{
-              $t("navbar.dropdown.notification.badge")
-            }}</span>
+            <i class="bx bx-bell" :class="{ 'bx-tada': areNotificationsToRead }"></i>
+            <span v-if="areNotificationsToRead" class="badge bg-danger rounded-pill">{{notificationsToRead.length}}</span>
           </template>
 
           <div class="p-3">
@@ -241,97 +296,30 @@ export default {
             </div>
           </div>
           <simplebar style="max-height: 230px">
-            <a href="javascript: void(0);" class="text-reset notification-item">
+            <a v-for="notification in notificationsToRead" 
+            :key="notification.valuationId"
+            :to="notification.route"
+            @click.prevent="markAsRead(notification)"
+            class="text-reset notification-item">
               <div class="media">
                 <div class="avatar-xs me-3">
                   <span
                     class="avatar-title bg-primary rounded-circle font-size-16"
                   >
-                    <i class="bx bx-cart"></i>
+                    <i :class="notification.icon"></i>
                   </span>
                 </div>
                 <div class="media-body">
                   <h6 class="mt-0 mb-1">
-                    {{ $t("navbar.dropdown.notification.order.title") }}
+                    {{notification.title}}
                   </h6>
                   <div class="font-size-12 text-muted">
                     <p class="mb-1">
-                      {{ $t("navbar.dropdown.notification.order.text") }}
+                    {{notification.text}}
                     </p>
                     <p class="mb-0">
                       <i class="mdi mdi-clock-outline"></i>
                       {{ $t("navbar.dropdown.notification.order.time") }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="javascript: void(0);" class="text-reset notification-item">
-              <div class="media">
-                <img
-                  src="@/assets/images/users/avatar-3.jpg"
-                  class="me-3 rounded-circle avatar-xs"
-                  alt="user-pic"
-                />
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">
-                    {{ $t("navbar.dropdown.notification.james.title") }}
-                  </h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">
-                      {{ $t("navbar.dropdown.notification.james.text") }}
-                    </p>
-                    <p class="mb-0">
-                      <i class="mdi mdi-clock-outline"></i>
-                      {{ $t("navbar.dropdown.notification.james.time") }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="javascript: void(0);" class="text-reset notification-item">
-              <div class="media">
-                <div class="avatar-xs me-3">
-                  <span
-                    class="avatar-title bg-success rounded-circle font-size-16"
-                  >
-                    <i class="bx bx-badge-check"></i>
-                  </span>
-                </div>
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">
-                    {{ $t("navbar.dropdown.notification.item.title") }}
-                  </h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">
-                      {{ $t("navbar.dropdown.notification.item.text") }}
-                    </p>
-                    <p class="mb-0">
-                      <i class="mdi mdi-clock-outline"></i>
-                      {{ $t("navbar.dropdown.notification.item.time") }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </a>
-            <a href="javascript: void(0);" class="text-reset notification-item">
-              <div class="media">
-                <img
-                  src="@/assets/images/users/avatar-4.jpg"
-                  class="me-3 rounded-circle avatar-xs"
-                  alt="user-pic"
-                />
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">
-                    {{ $t("navbar.dropdown.notification.salena.title") }}
-                  </h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">
-                      {{ $t("navbar.dropdown.notification.salena.text") }}
-                    </p>
-                    <p class="mb-0">
-                      <i class="mdi mdi-clock-outline"></i>
-                      {{ $t("navbar.dropdown.notification.salena.time") }}
                     </p>
                   </div>
                 </div>
@@ -394,6 +382,10 @@ export default {
             {{ $t("navbar.dropdown.henry.list.logout") }}
           </a>
         </b-dropdown>
+
+        <div class="dropdown d-inline-block">
+        <QAActionButton/>
+        </div>
       </div>
     </div>
   </header>

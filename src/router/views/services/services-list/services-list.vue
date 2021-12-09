@@ -97,7 +97,6 @@ export default {
   },
 
   methods: {
-
     getServices() {
       axios.get("services-module/Services").then((res) => {
         this.tableData = res.data;

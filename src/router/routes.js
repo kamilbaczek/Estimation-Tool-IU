@@ -51,6 +51,14 @@ export default [
     component: () => import("./views/users/list-users/list-users"),
   },
   {
+    path: "/payments/pay/:paymentId",
+    name: "payments",
+    meta: {
+      authRequired: true,
+    },
+    component: () => import("./views/payments/pay"),
+  },
+  {
     path: "/login",
     name: "login",
     component: () => import("./views/account/login"),

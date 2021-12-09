@@ -11,6 +11,7 @@
     "postinstall": "yarn build"
   },
   "dependencies": {
+    "@aspnet/signalr": "^1.0.27",
     "@ckeditor/ckeditor5-build-classic": "^22.0.0",
     "@ckeditor/ckeditor5-vue": "^1.0.3",
     "@fullcalendar/bootstrap": "^5.3.1",
@@ -20,6 +21,7 @@
     "@fullcalendar/list": "^5.3.1",
     "@fullcalendar/timegrid": "^5.3.1",
     "@fullcalendar/vue": "^5.3.1",
+    "@microsoft/signalr": "^6.0.0",
     "@voerro/vue-tagsinput": "^2.4.3",
     "apexcharts": "^3.22.2",
     "bootstrap": "^5.0.0-beta2",
@@ -40,6 +42,7 @@
     "simplebar-vue": "^1.6.0",
     "sweetalert2": "^10.12.3",
     "v-click-outside": "^3.1.2",
+    "v-credit-card": "^1.2.4",
     "v-mask": "^2.2.3",
     "vee-validate": "^3.4.5",
     "vue": "^2.6.12",

@@ -15,7 +15,9 @@ export default {
           return "bg-warning";
         case "Rejected":
           return "bg-danger";
-        case "Approved" || "Completed":
+        case "Approved":
+          return "bg-success";
+        case "Completed":
           return "bg-success";
       }
     },

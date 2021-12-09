@@ -55,8 +55,17 @@ export default {
     this.loadData();
   },
   methods: {
-    openSuggestModal() {
-      this.$refs["suggest-proposal-modal"].show();
+      openSuggestModal() {
+      this.$refs.suggestProposalModal.show();
+    },
+    complete() {
+        axios
+        .patch('valuations-module/Valuations/valuations/complete',  {
+          valuationId: this.valuationId,
+        })
+        .then(() => {
+          this.loadData();
+        });
     },
     loadData() {
     const context = this;
@@ -64,18 +73,18 @@ export default {
     .get(`valuations-module/valuations/${this.valuationId}`)
     .then((res) => {
         this.valuationInformation = res.data.valuationInformation;
-      context.loadInquiries();
-          });
+        context.loadInquiries();
+     });
     },
     loadInquiries() {
       axios
-          .get(`inquries-module/Inquiries/${this.valuationInformation.inquiryId}`)
-          .then((res) => {
-            this.inquiryDetails = res.data.inquiryDetails;
-            this.servicesIds = res.data.inquiryDetails.services.map(
-              (service) => service.serviceId
-            );
-          });
+        .get(`inquries-module/Inquiries/${this.valuationInformation.inquiryId}`)
+        .then((res) => {
+          this.inquiryDetails = res.data.inquiryDetails;
+          this.servicesIds = res.data.inquiryDetails.services.map(
+            (service) => service.serviceId
+          );
+        });
     }
   },
 };
@@ -134,9 +143,17 @@ export default {
                 ></a>
                 <button
                   @click.prevent="openSuggestModal()"
+                  v-if="valuationInformation.status === 'WaitForProposal'"
                   class="btn btn-danger w-lg waves-effect waves-light"
                 >
                   <i class="fa fa-comments-dollar"></i> Suggest
+                </button>
+                <button
+                  @click.prevent="complete()"
+                  v-if="valuationInformation.status === 'Approved' || valuationInformation.status === 'Rejected'"
+                  class="btn btn-success w-lg waves-effect waves-light"
+                >
+                  <i class="fas fa-clipboard-check"></i> Complete
                 </button>
               </div>
             </div>
@@ -145,8 +162,7 @@ export default {
       </div>
     </div>
     <SuggestProposalModal
-      ref="suggest-proposal-modal"
-      v-if="valuationId"
+      ref="suggestProposalModal"
       :valuationId="valuationId"
       @onProposalSuggested="loadData()"
     ></SuggestProposalModal>

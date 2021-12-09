@@ -22,6 +22,7 @@ export default {
 
 <template>
 <div>
+    test env
     <vertical v-if="layoutType === 'vertical'" :layout="layoutType">
         <slot />
     </vertical>

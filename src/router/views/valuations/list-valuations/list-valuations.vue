@@ -83,13 +83,15 @@ export default {
       :title="title"
       :fields="fields"
       :tableData="tableData"
+      :sort-by="requestedDate"
+      :sort-desc="false"
       :totalRows="totalRows"
     >
       <template v-slot:actions="data">
         <b-button
           @click.prevent="goToDetails(data.item.valuationId)"
           variant="info"
-          class="mx-1"
+          class="mx-auto"
           title="Go to details"
         >
           <i class="bx bx-detail font-size-16 align-middle me-2"></i>

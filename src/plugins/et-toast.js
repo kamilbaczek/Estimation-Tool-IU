@@ -13,6 +13,17 @@ export default {
                 showConfirmButton: false,
                 timerProgressBar: true,
               });
+        },
+        Vue.prototype.$etToastDanger =  (title, timer = 50500, position="top-end") => {
+            Vue.prototype.$swal.fire({
+                position: position,
+                timer: timer,
+                title: title,
+                icon: "error",
+                toast: true,
+                showConfirmButton: true,
+                timerProgressBar: true,
+              });
         }
     }
     

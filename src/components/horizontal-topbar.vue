@@ -552,7 +552,7 @@ export default {
           <template v-slot:button-content>
             <i class="bx bx-bell bx-tada"></i>
             <span class="badge bg-danger rounded-pill">{{
-              $t("navbar.dropdown.notification.badge")
+              
             }}</span>
           </template>
 

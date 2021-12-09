@@ -49,7 +49,6 @@ export default {
         })
         .then(() => {
           this.hide();
-
           this.$etToast(
             `Valuation estimited: ${this.form.value} ${this.form.currency}`
           );

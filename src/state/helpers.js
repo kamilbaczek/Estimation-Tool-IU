@@ -32,3 +32,11 @@ export const todoComputed = {
   })
 }
 export const todoMethods = mapActions('todo', ['fetchTodos'])
+
+export const pushNotificationsComputed = {
+  ...mapState('pushNotifications', {
+    pushNotifications: (state) => state.pushNotifications
+  }),
+  ...mapGetters('pushNotifications', ['allPushNotifications']),
+}
+export const pushNotificationsMethods = mapActions('pushNotifications', ['addPushNotification'])
