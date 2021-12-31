@@ -27,7 +27,7 @@ export default {
 
   props: {
     changeDate: {
-      type: Date,
+      type: String,
       required: true,
     },
     status: {

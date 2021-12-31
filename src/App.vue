@@ -33,6 +33,6 @@ export default {
 
 <template>
   <div id="app">
-    <RouterView />
+    <RouterView :key="$route.fullPath"/>
   </div>
 </template>

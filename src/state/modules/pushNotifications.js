@@ -8,8 +8,6 @@ export const getters = {
 
 export const mutations = {
 ADD_PUSH(state, newValue) {
-// eslint-disable-next-line no-debugger
-debugger;
         state.pushNotifications = newValue; 
     },
 };

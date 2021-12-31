@@ -67,7 +67,7 @@ export default {
               </h6>
             </b-card-header>
             <b-collapse
-              :id="index"
+              :id="`${index}`"
               visible
               accordion="serivces-accordion"
               role="tabpanel"

@@ -1,12 +1,9 @@
 <script>
-import axios from "axios";
-
+import axios from "@/helpers/http-comunicator";
 import i18n from "../i18n";
 import TestEnvBanner from "../components/widgets/test-env/test-ent-banner.vue";
 import QAActionButton from "../components/widgets/test-env/qa-actions-button.vue";
-import { pushNotificationsMethods } from "@/state/helpers";
-
-import simplebar from "simplebar-vue";
+import PushNotifications from "../components/push-notifications.vue";
 
 /**
  * Nav-bar Component
@@ -47,63 +44,15 @@ export default {
       value: null,
     };
   },
-  components: { simplebar, TestEnvBanner ,QAActionButton},
-  computed: {
-    areNotificationsToRead()
-    {
-     return this.notificationsToRead.length > 0
-    },
-    notifications()
-    {
-return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
-    },
-    notificationsToRead() {
-      return this.notifications.filter(notification => notification.markedAsRead === false);
-    },
-  },
+  components: { TestEnvBanner ,QAActionButton, PushNotifications },
   mounted() {
     this.value = this.languages.find((x) => x.language === i18n.locale);
     this.text = this.value.title;
     this.flag = this.value.flag;
-
-    this.$valuationsHub.$on("proposal-approved-event", (event) => {
-      this.$etToast(`Proposal approved ${event.valuationId}`);
-      const route = { name: "details-valuation", params: { id: event.valuationId } };
-        const notification = {
-          valuationId: event.valuationId,
-          text: `Proposal approved`,
-          title: "New valuation",
-          route: route,
-          icon: 'bx bx-trophy',
-          markedAsRead: false,
-          };
-      const push = [...this.notifications,notification];
-     this.addPushNotification(push); 
-        });
-
-    function valuationsHub() {
-      this.$valuationsHub.$on("valuation-requested-event", (event) => {
-        this.$etToast(`Valuation requested ${event.valuationId}`);
-        const route = {name: "details-valuation", params: {id: event.valuationId}};
-        const notification = {
-          valuationId: event.valuationId,
-          text: `Check out new valuation`,
-          title: "New valuation",
-          route: route,
-          icon: 'bx bx-trophy',
-          markedAsRead: false,
-        };
-        const push = [...this.notifications, notification];
-        this.addPushNotification(push);
-      });
-    }
-
-    valuationsHub.call(this);
   },
   beforeDestroy: function() {
   },
   methods: {
-    ...pushNotificationsMethods,
     toggleMenu() {
       this.$parent.toggleMenu();
     },
@@ -133,12 +82,6 @@ return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
           document.webkitCancelFullScreen();
         }
       }
-    },
-    markAsRead(notification)
-    {
-      notification.markedAsRead = true;
-      this.addPushNotification(this.notifications);
-      this.$router.push(notification.route)
     },
     setLanguage(locale, country, flag) {
       this.lan = locale;
@@ -236,7 +179,7 @@ return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
             </div>
           </form>
         </b-dropdown>
-
+        <PushNotifications/>
         <b-dropdown variant="white" right toggle-class="header-item">
           <template v-slot:button-content>
             <img class :src="flag" alt="Header Language" height="16" />
@@ -270,72 +213,6 @@ return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
           </button>
         </div>
 
-        <b-dropdown
-          right
-          menu-class="dropdown-menu-lg p-0 dropdown-menu-end"
-          toggle-class="header-item noti-icon"
-          variant="black"
-        >
-          <template v-slot:button-content>
-            <i class="bx bx-bell" :class="{ 'bx-tada': areNotificationsToRead }"></i>
-            <span v-if="areNotificationsToRead" class="badge bg-danger rounded-pill">{{notificationsToRead.length}}</span>
-          </template>
-
-          <div class="p-3">
-            <div class="row align-items-center">
-              <div class="col">
-                <h6 class="m-0">
-                  {{ $t("navbar.dropdown.notification.text") }}
-                </h6>
-              </div>
-              <div class="col-auto">
-                <a href="#" class="small">{{
-                  $t("navbar.dropdown.notification.subtext")
-                }}</a>
-              </div>
-            </div>
-          </div>
-          <simplebar style="max-height: 230px">
-            <a v-for="notification in notificationsToRead" 
-            :key="notification.valuationId"
-            :to="notification.route"
-            @click.prevent="markAsRead(notification)"
-            class="text-reset notification-item">
-              <div class="media">
-                <div class="avatar-xs me-3">
-                  <span
-                    class="avatar-title bg-primary rounded-circle font-size-16"
-                  >
-                    <i :class="notification.icon"></i>
-                  </span>
-                </div>
-                <div class="media-body">
-                  <h6 class="mt-0 mb-1">
-                    {{notification.title}}
-                  </h6>
-                  <div class="font-size-12 text-muted">
-                    <p class="mb-1">
-                    {{notification.text}}
-                    </p>
-                    <p class="mb-0">
-                      <i class="mdi mdi-clock-outline"></i>
-                      {{ $t("navbar.dropdown.notification.order.time") }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </simplebar>
-          <div class="p-2 border-top d-grid">
-            <a
-              class="btn btn-sm btn-link font-size-14 text-center"
-              href="javascript:void(0)"
-            >
-              <i class="mdi mdi-arrow-right-circle me-1"></i>
-              {{ $t("navbar.dropdown.notification.button") }}
-            </a>
-          </div>
-        </b-dropdown>
 
         <b-dropdown
           right
