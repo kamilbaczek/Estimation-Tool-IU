@@ -2,19 +2,15 @@ import { HubConnectionBuilder, LogLevel } from "@aspnet/signalr";
 export default {
   install(Vue) {
     const connection = new HubConnectionBuilder()
-      .withUrl(`https://localhost:5001/hubs/valuations`) 
+      .withUrl(`https://localhost:5001/hubs/payments`)
       .configureLogging(LogLevel.Information)
       .build();
 
-    const valuationsHub = new Vue();
-    Vue.prototype.$valuationsHub = valuationsHub;
+    const paymentsHub = new Vue();
+    Vue.prototype.$paymentsHub = paymentsHub;
 
-    connection.on("ProposalApproved", (event) => {
-      valuationsHub.$emit("proposal-approved-event", event);
-    });
-
-    connection.on("ValuationRequested", (event) => {
-      valuationsHub.$emit("valuation-requested-event", event);
+    connection.on("PaymentCompleted", (event) => {
+      paymentsHub.$emit("payment-completed-event", event);
     });
 
     let startedPromise = null;

@@ -15,6 +15,7 @@ import router from "./router/index";
 import Scrollspy from "vue2-scrollspy";
 import VueSweetalert2 from "vue-sweetalert2";
 import ValuationsHub from "./valuations-hub";
+import PaymentsHub from "./payments-hub";
 import 'sweetalert2/dist/sweetalert2.min.css';
 import "../src/design/app.scss";
 
@@ -50,6 +51,7 @@ Vue.use(require("vue-chartist"));
 Vue.use(VueSweetalert2);
 Vue.use(VueMask);
 Vue.use(ValuationsHub)
+Vue.use(PaymentsHub)
 Vue.use(EtToast);
 Vue.use(EtConfirm);
 Vue.use(VueGoogleMaps, {

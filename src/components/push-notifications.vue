@@ -100,6 +100,14 @@ export default {
       });
     }
     valuationsHub.call(this);
+
+    function paymentsHub() {
+      this.$paymentsHub.$on("payment-completed-event", (event) => {
+        this.$etToast(`Payment Completed ${event.paymentId}`);
+        this.loadNotifications();
+      });
+    }
+    paymentsHub.call(this);
   },
   methods: {
     ...pushNotificationsMethods,
@@ -123,6 +131,12 @@ export default {
       item.icon = "bx bx-trophy";
       item.route = {name: "details-valuation", params: {id: item.valuationId}};
     },
+    paymentCompletedNotificationItem(item) {
+      item.title = "Payment completed";
+      item.text = `Payment '${item.paymentId}`;
+      item.icon = "bx bxs-badge-dollar";
+      item.route = {name: "details-valuation", params: {id: item.valuationId}};
+    },
     loadNotifications() {
       axios
           .get("/notifications-module/Notifications")
@@ -135,6 +149,9 @@ export default {
                 case "ValuationRequested":
                   this.createValuationRequestedNotificationItem(item);
                   break;
+                case "PaymentCompleted":
+                  this.paymentCompletedNotificationItem(item);
+                  break
               }
             });
             this.addPushNotification(res.data);
