@@ -1,16 +1,16 @@
 <template>
   <b-dropdown
-      right
       menu-class="dropdown-menu-lg p-0 dropdown-menu-end"
+      right
       toggle-class="header-item noti-icon"
       variant="black"
   >
     <template v-slot:button-content>
-      <i class="bx bx-bell" :class="{ 'bx-tada': areNotificationsToRead }"></i>
-      <span v-if="areNotificationsToRead" class="badge bg-danger rounded-pill">{{notificationsToRead.length}}</span>
+      <i :class="{ 'bx-tada': areNotificationsToRead }" class="bx bx-bell"></i>
+      <span v-if="areNotificationsToRead" class="badge bg-danger rounded-pill">{{ notificationsToRead.length }}</span>
     </template>
 
-    <div class="p-3" v-if="areNotificationsToRead">
+    <div v-if="areNotificationsToRead" class="p-3">
       <div class="row align-items-center">
         <div class="col">
           <h6 class="m-0">
@@ -18,18 +18,18 @@
           </h6>
         </div>
         <div class="col-auto">
-          <a href="#" class="small">{{
+          <a class="small" href="#">{{
               $t("navbar.dropdown.notification.subtext")
             }}</a>
         </div>
       </div>
     </div>
-    <simplebar style="max-height: 230px" >
+    <simplebar style="max-height: 230px">
       <a v-for="notification in notificationsToRead"
          :key="notification.id"
          :to="notification.route"
-         @click.prevent="markAsRead(notification)"
-         class="text-reset notification-item">
+         class="text-reset notification-item"
+         @click.prevent="markAsRead(notification)">
         <div class="media">
           <div class="avatar-xs me-3">
                   <span
@@ -40,15 +40,15 @@
           </div>
           <div class="media-body">
             <h6 class="mt-0 mb-1">
-              {{notification.title}}
+              {{ notification.title }}
             </h6>
             <div class="font-size-12 text-muted">
               <p class="mb-1">
-                {{notification.text}}
+                {{ notification.text }}
               </p>
               <p class="mb-0">
                 <i class="mdi mdi-clock-outline"></i>
-                {{ $t("navbar.dropdown.notification.order.time") }}
+                {{ getTimeFromNow(notification) }}
               </p>
             </div>
           </div>
@@ -70,17 +70,16 @@
 import axios from "@/helpers/http-comunicator";
 import {pushNotificationsMethods} from "@/state/helpers";
 import simplebar from "simplebar-vue";
+import moment from "moment";
 
 export default {
   name: "push-notifications",
-  components: { simplebar },
+  components: {simplebar},
   computed: {
-    areNotificationsToRead()
-    {
+    areNotificationsToRead() {
       return this.notificationsToRead.length > 0
     },
-    notifications()
-    {
+    notifications() {
       return this.$store ? this.$store.state.pushNotifications.pushNotifications : [];
     },
     notificationsToRead() {
@@ -89,6 +88,7 @@ export default {
   },
   mounted() {
     this.loadNotifications();
+
     function valuationsHub() {
       this.$valuationsHub.$on("valuation-requested-event", (event) => {
         this.$etToast(`Valuation requested ${event.valuationId}`);
@@ -98,7 +98,12 @@ export default {
         this.$etToast(`Proposal approved ${event.valuationId}`);
         this.loadNotifications();
       });
+      this.$valuationsHub.$on("valuation-close-to-deadline-remind-event", (event) => {
+        this.$etToastDanger(`Close to deadline valuation ${event.valuationId}`);
+        this.loadNotifications();
+      });
     }
+
     valuationsHub.call(this);
 
     function paymentsHub() {
@@ -107,6 +112,7 @@ export default {
         this.loadNotifications();
       });
     }
+
     paymentsHub.call(this);
   },
   methods: {
@@ -119,23 +125,46 @@ export default {
             this.loadNotifications();
           });
     },
+    getTimeFromNow(item) {
+      const diffInSeconds = moment().diff(moment(item.eventDate), 'seconds');
+      const diffInMinutes = moment().diff(moment(item.eventDate), 'minutes');
+      const diffInHours = moment().diff(moment(item.eventDate), 'hours');
+      if (diffInSeconds <= 60) {
+        return `${diffInSeconds} seconds ago`;
+      }
+      if (diffInMinutes <= 60) {
+        return `${diffInMinutes} minutes ago`;
+      }
+
+      if (diffInHours <= 24) {
+        return `${diffInHours} hours ago`;
+      }
+
+      return moment(item.eventDate).format('MM/DD/YYYY');
+    },
     createValuationRequestedNotificationItem(item) {
       item.title = "Valuation requested";
       item.text = `Valuation requested click to suggest proposal`;
       item.icon = "bx bx-paperclip";
-      item.route = {name: "details-valuation", params: {id: item.valuationId}};
+      item.route = {name: "details-valuation", params: {id: item.actionId}};
     },
     createProposalApprovedNotificationItem(item) {
       item.title = "Proposal approved";
-      item.text = `Proposal approved for valuation '${item.valuationId}`;
+      item.text = `Proposal approved for valuation '${item.actionId}'`;
       item.icon = "bx bx-trophy";
-      item.route = {name: "details-valuation", params: {id: item.valuationId}};
+      item.route = {name: "details-valuation", params: {id: item.actionId}};
     },
     paymentCompletedNotificationItem(item) {
       item.title = "Payment completed";
-      item.text = `Payment '${item.paymentId}`;
-      item.icon = "bx bxs-badge-dollar";
-      item.route = {name: "details-valuation", params: {id: item.valuationId}};
+      item.text = `Payment '${item.actionId}'`;
+      item.icon = "bx bx-dollar";
+      item.route = {name: "details-valuation", params: {id: item.actionId}};
+    },
+    valuationCloseToDeadlineItem(item) {
+      item.title = "Valuation close to deadline";
+      item.text = `Valuation '${item.actionId}'`;
+      item.icon = "bx bxs-timer";
+      item.route = {name: "details-valuation", params: {id: item.actionId}};
     },
     loadNotifications() {
       axios
@@ -151,6 +180,9 @@ export default {
                   break;
                 case "PaymentCompleted":
                   this.paymentCompletedNotificationItem(item);
+                  break
+                case "ValuationCloseToDeadlineRemind":
+                  this.valuationCloseToDeadlineItem(item);
                   break
               }
             });

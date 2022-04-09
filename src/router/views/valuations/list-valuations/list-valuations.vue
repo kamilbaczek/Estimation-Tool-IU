@@ -6,6 +6,8 @@ import appConfig from "@/app.config";
 import Grid from "@/components/et-grid";
 import Status from "../components/status.vue";
 import DateFormatter from "@/helpers/dates/date-formatter";
+import Priority from "@/router/views/valuations/components/priority";
+import Identifier from "@/router/views/valuations/components/identifier";
 
 export default {
   page: {
@@ -18,6 +20,8 @@ export default {
     ],
   },
   components: {
+    Identifier,
+    Priority,
     Layout,
     PageHeader,
     Grid,
@@ -51,6 +55,10 @@ export default {
           key: "status",
           sortable: true,
         },
+        {
+          key: "priority",
+          sortable: true,
+        },
         { key: "actions", label: "Actions" },
       ],
       totalRows: 1,
@@ -59,19 +67,27 @@ export default {
   mounted() {
     this.totalRows = this.items.length;
     axios
-      .get("valuations-module/Valuations", {
-        headers: {
-          "Content-type": "application/json;charset=utf-8",
-        },
-      })
+      .get("valuations-module/Valuations")
       .then((res) => {
-        this.tableData = res.data.valuations;
+        const data = res.data.valuations;
+        this.loadPriorities(data);
       });
   },
   methods: {
     goToDetails(id) {
       this.$router.push({ name: "details-valuation", params: { id: id } });
     },
+    loadPriorities(valuations) {
+    axios
+      .get("priorities-module/Priorities").then((res) => {
+      valuations.forEach((valuation) => {
+      let priority = res.data.priorities.find(priority => priority.valuationId === valuation.valuationId);
+        valuation.priority = priority?.level ?? "";
+    });
+
+    this.tableData = valuations;
+  });
+}
   },
 };
 </script>
@@ -101,6 +117,12 @@ export default {
 
       <template v-slot:status="data">
         <Status :status="data.item.status"></Status>
+      </template>
+      <template v-slot:priority="data">
+        <Priority :priority="data.item.priority"></Priority>
+      </template>
+      <template v-slot:inquiryId="data">
+        <Identifier :id="data.item.inquiryId"></Identifier>
       </template>
     </Grid>
   </Layout>

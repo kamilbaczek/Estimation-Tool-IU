@@ -1,8 +1,13 @@
 import { HubConnectionBuilder, LogLevel } from "@aspnet/signalr";
 export default {
   install(Vue) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if(!user) return;
     const connection = new HubConnectionBuilder()
-      .withUrl(`https://localhost:5001/hubs/valuations`) 
+      .withUrl("https://localhost:5001/hubs/valuations",
+    {
+      accessTokenFactory: () => user.token,
+    })
       .configureLogging(LogLevel.Information)
       .build();
 
@@ -11,6 +16,10 @@ export default {
 
     connection.on("ProposalApproved", (event) => {
       valuationsHub.$emit("proposal-approved-event", event);
+    });
+
+    connection.on("ValuationCloseToDeadlineRemind", (event) => {
+      valuationsHub.$emit("valuation-close-to-deadline-remind-event", event);
     });
 
     connection.on("ValuationRequested", (event) => {

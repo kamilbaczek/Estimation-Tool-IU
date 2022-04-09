@@ -64,7 +64,8 @@ export default {
       axios.post("inquries-module/Inquiries", {
         firstName: "test",
         lastName: "test",
-        email: "test@mail.com",
+        email: "kamilbaczek98@gmail.com",
+        phoneNumber: "+48793751966",
         askedServiceDtos:[
         {
           id: this.services[0].id,

@@ -60,7 +60,7 @@ export default {
     },
     complete() {
         axios
-        .patch('valuations-module/Valuations/valuations/complete',  {
+        .patch('valuations-module/Valuations/complete',  {
           valuationId: this.valuationId,
         })
         .then(() => {

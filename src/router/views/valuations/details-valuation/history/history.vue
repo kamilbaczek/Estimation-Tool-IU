@@ -42,7 +42,7 @@ export default {
     getHistory() {
       axios
         .get(
-          `valuations-module/Valuations/valuations/history/${this.valuationId}`
+          `valuations-module/Valuations/${this.valuationId}/history`
         )
         .then((res) => {
           this.historicalEntries = res.data.valuationHistoricalEntries;

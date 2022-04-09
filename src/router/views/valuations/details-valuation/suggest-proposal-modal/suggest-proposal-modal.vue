@@ -41,7 +41,7 @@ export default {
 
     onSend() {
       axios
-        .post("valuations-module/Valuations/valuations/proposals", {
+        .post("valuations-module/Valuations/proposals", {
           currency: this.form.currency,
           value: this.form.value,
           description: this.form.description,

@@ -43,6 +43,22 @@ export default [
       import("./views/valuations/details-valuation/details-valuation"),
   },
   {
+    path: "/valuations/:id/proposals/:proposalId/approve",
+    name: "approved-valuation",
+    component: () =>
+        import("./views/valuations/proposals/approved/approved"),
+    beforeResolve(routeTo, routeFrom, next) {
+      // If the user is already logged in
+      if (store.getters["auth/loggedIn"]) {
+        // Redirect to the home page instead
+        next({name: "default"});
+      } else {
+        // Continue to the login page
+        next();
+      }
+    }
+  },
+  {
     path: "/users",
     name: "users",
     meta: {

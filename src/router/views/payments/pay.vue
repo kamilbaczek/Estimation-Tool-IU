@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       name: "",
-      cardNumber: "",
+      cardNumber: "378282246310005",
       expiration: "",
       security: "",
       paymentId: null,
