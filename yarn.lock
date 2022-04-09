@@ -4715,11 +4715,6 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
-fecha@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/fecha/-/fecha-4.2.1.tgz#0a83ad8f86ef62a091e22bb5a039cd03d23eecce"
-  integrity sha512-MMMQ0ludy/nBs1/o0zVOiKTpG7qMbonKUzjJgQFEuvq6INZ1OraKPRAWkBq5vlKLOUMpmNYG1JoN3oDPUQ9m3Q==
-
 fetch-cookie@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/fetch-cookie/-/fetch-cookie-0.11.0.tgz#e046d2abadd0ded5804ce7e2cae06d4331c15407"
@@ -8496,6 +8491,11 @@ sass-loader@^10.1.0:
     schema-utils "^3.0.0"
     semver "^7.3.2"
 
+sass-migrator@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/sass-migrator/-/sass-migrator-1.5.4.tgz#1378d90eb92898863d29208272f43d055dd2fc21"
+  integrity sha512-KPnoY84/dKYPW5TW6qXASR3yOpap4+tPfCygzNKhaodg3cF+dwlyTwnbJj0QZd64nQD8g7RsicFbqSG6ts0WlQ==
+
 sass@^1.30.0:
   version "1.50.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.50.0.tgz#3e407e2ebc53b12f1e35ce45efb226ea6063c7c8"
@@ -10049,15 +10049,6 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
-vue-hotel-datepicker@^4.1.0:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/vue-hotel-datepicker/-/vue-hotel-datepicker-4.5.1.tgz#e70948b982daf6499f9f210ea1a3b23c4f3c9364"
-  integrity sha512-CQtrypXyn3Y/4rR0Vmgfv0asOi03BuKjfl4SRiO1YyqAXsyqOfbXmPJmbAyAkbFysvj+fRbV0MMa60aG9Usdlw==
-  dependencies:
-    fecha "^4.2.1"
-    lodash.throttle "^4.1.1"
-    vue "^2.6.14"
-
 vue-hotjar@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/vue-hotjar/-/vue-hotjar-1.4.0.tgz#562f279f55b3ed1fdd54ba493f8077aaad2336ef"
@@ -10240,7 +10231,7 @@ vue2-scrollspy@^2.3.1:
     "@tweenjs/tween.js" "^17.2.0"
     babel-runtime "^6.26.0"
 
-vue@^2.2.6, vue@^2.5.13, vue@^2.5.17, vue@^2.5.22, vue@^2.6.10, vue@^2.6.11, vue@^2.6.12, vue@^2.6.14:
+vue@^2.2.6, vue@^2.5.13, vue@^2.5.17, vue@^2.5.22, vue@^2.6.10, vue@^2.6.11, vue@^2.6.12:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
