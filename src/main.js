@@ -23,7 +23,6 @@ import store from "@/state/store";
 
 import App from "./App.vue";
 
-import i18n from "./i18n";
 
 import tinymce from "vue-tinymce-editor";
 import dateFormatter from "./helpers/dates/date-formatter";
@@ -80,6 +79,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  i18n,
   render: (h) => h(App),
 }).$mount("#app");
