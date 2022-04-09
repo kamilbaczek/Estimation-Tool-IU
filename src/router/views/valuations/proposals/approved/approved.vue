@@ -25,7 +25,7 @@ export default {
   methods: {
     approve() {
       axios
-          .patch('valuations-module/Valuations/valuations/proposals/approve',  {
+          .patch('valuations-module/Valuations/proposals/approve',  {
             valuationId: this.valuationId,
             proposalId: this.proposalId,
           })
