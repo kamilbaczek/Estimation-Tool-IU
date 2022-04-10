@@ -58,7 +58,7 @@
     "vue-echarts": "^5.0.0-beta.0",
     "vue-form-wizard": "^0.8.4",
     "vue-hotjar": "^1.4.0",
-    "vue-i18n": "^8.22.2",
+    "vue-i18n": "9.1.9",
     "vue-loading-overlay": "^3.4.2",
     "vue-meta": "^2.4.0",
     "vue-multiselect": "^2.1.6",
