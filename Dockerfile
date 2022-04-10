@@ -1,13 +1,14 @@
-FROM node:lts as develop-stage
-WORKDIR /app
-COPY package*.json ./
-COPY vue.config.js ./
-RUN yarn install
-COPY . .
-FROM develop-stage as build-stage
-RUN yarn build
-FROM nginx:1.15.7-alpine as production-stage
-COPY /app/nginx.conf /etc/nginx/conf.d/default.conf
-FROM nginx:alpine
-COPY --from=build-stage /app/dist/ /usr/share/nginx/html/
-CMD sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+FROM node:10.15.0 as ui-builder
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY package.json /usr/src/app/package.json
+RUN npm install --force
+RUN npm install -g @vue/cli
+COPY . /usr/src/app
+RUN npm run build
+
+FROM nginx
+COPY  --from=ui-builder /usr/src/app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
