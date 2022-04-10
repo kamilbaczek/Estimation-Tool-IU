@@ -1,6 +1,7 @@
 FROM node:lts as develop-stage
 WORKDIR /app
 COPY package*.json ./
+COPY vue.config.js ./
 RUN yarn install
 COPY . .
 FROM develop-stage as build-stage
