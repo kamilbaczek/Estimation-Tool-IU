@@ -55,7 +55,7 @@
       "notification": {
         "badge": "3",
         "text": "Notifications",
-        "subtext": "View All",
+        "subtext": "Mark as read",
         "order": {
           "title": "Your order is placed",
           "text": "If several languages coalesce the grammar",

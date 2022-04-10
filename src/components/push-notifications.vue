@@ -18,7 +18,7 @@
           </h6>
         </div>
         <div class="col-auto">
-          <a class="small" href="#">{{
+          <a class="small" href="#" @click.prevent="markAllAsRead()">{{
               $t("navbar.dropdown.notification.subtext")
             }}</a>
         </div>
@@ -119,12 +119,21 @@ export default {
     ...pushNotificationsMethods,
     markAsRead(notification) {
       axios
-          .patch(`/notifications-module/Notifications/${notification.id}/markAsRead`)
+          .patch(`/push-module/notifications/${notification.id}/mark-as-read`)
           .then(() => {
             this.$router.push(notification.route)
             this.loadNotifications();
           });
     },
+
+    markAllAsRead() {
+      axios
+          .patch(`/push-module/notifications/mark-all-as-read`)
+          .then(() => {
+            this.loadNotifications();
+          });
+    },
+
     getTimeFromNow(item) {
       const diffInSeconds = moment().diff(moment(item.eventDate), 'seconds');
       const diffInMinutes = moment().diff(moment(item.eventDate), 'minutes');
@@ -168,7 +177,7 @@ export default {
     },
     loadNotifications() {
       axios
-          .get("/notifications-module/Notifications")
+          .get("/push-module/notifications")
           .then((res) => {
             res.data.forEach((item) => {
               switch (item.type) {
