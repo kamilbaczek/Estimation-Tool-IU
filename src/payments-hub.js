@@ -5,7 +5,10 @@ export default {
     if(!user) return;
 
     const connection = new HubConnectionBuilder()
-      .withUrl(`${process.env.VUE_APP_SIGNALR_BASE_URL}/payments`)
+      .withUrl(`${process.env.VUE_APP_SIGNALR_BASE_URL}/payments`,
+     {
+       accessTokenFactory: () => user.token
+      })
       .configureLogging(LogLevel.Information)
       .build();
 
