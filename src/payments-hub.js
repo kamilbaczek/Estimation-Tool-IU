@@ -5,7 +5,7 @@ export default {
     if(!user) return;
 
     const connection = new HubConnectionBuilder()
-      .withUrl(`https://localhost:5001/hubs/payments`)
+      .withUrl(`${process.env.VUE_APP_SIGNALR_BASE_URL}/payments`)
       .configureLogging(LogLevel.Information)
       .build();
 

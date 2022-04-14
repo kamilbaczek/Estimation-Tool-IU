@@ -4,10 +4,10 @@ export default {
     const user = JSON.parse(localStorage.getItem('user'));
     if(!user) return;
     const connection = new HubConnectionBuilder()
-      .withUrl("https://localhost:5001/hubs/valuations",
+      .withUrl(`${process.env.VUE_APP_SIGNALR_BASE_URL}/valuations`,
     {
       accessTokenFactory: () => user.token,
-    })
+      })
       .configureLogging(LogLevel.Information)
       .build();
 
