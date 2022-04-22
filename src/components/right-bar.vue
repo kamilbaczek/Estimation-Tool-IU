@@ -17,6 +17,10 @@ export default {
         middleware: this.middleware,
         events: ["click"],
       },
+      form: {
+        email: "kamilbaczek98@gmail.com",
+        phoneNumber: "+48793751966",
+      },
       services:[],
       valuations:[],
       valuationId:"",
@@ -62,10 +66,10 @@ export default {
     },
     madeInquiry() {
       axios.post("inquries-module/Inquiries", {
-        firstName: "test",
-        lastName: "test",
-        email: "kamilbaczek98@gmail.com",
-        phoneNumber: "+48793751966",
+        firstName: "Hubert",
+        lastName: "Siast",
+        email: this.form.email,
+        phoneNumber:  this.form.phoneNumber,
         askedServiceDtos:[
         {
           id: this.services[0].id,
@@ -101,6 +105,20 @@ export default {
       <simplebar class="h-100">
         <div class="rightbar-title px-3 py-4">
           <h5 class="m-0">Tests Actions</h5>
+          <b-form-group label="email">
+            <b-form-input
+                id="email"
+                name="email"
+                v-model="form.email"
+            />
+          </b-form-group>
+          <b-form-group label="phoneNumber">
+            <b-form-input
+                id="phoneNumber"
+                name="phoneNumber"
+                v-model="form.phoneNumber"
+            />
+          </b-form-group>
           <b-button
           variant="danger"
           class="mx-1 my-2"
