@@ -1,4 +1,8 @@
-# Skote - Vue based admin template
+# Estimations Tool - makes estimations easier
+
+## Demo
+[estimationtool.divstack.pl](http://estimationtool.divstack.pl/)
+
 
 ## Project setup
 ```
@@ -24,6 +28,3 @@ yarn run test
 ```
 yarn run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
