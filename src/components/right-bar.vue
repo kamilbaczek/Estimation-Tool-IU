@@ -92,7 +92,7 @@ export default {
        .then((res) => {
         this.valuations = res.data.valuations;
         const recentRequestValuation = this.valuations.find(valuation => valuation.inquiryId === this.inquiryId);
-        this.valuationId = recentRequestValuation.valuationId;
+        this.valuationId = recentRequestValuation.id;
         })
       },
     }

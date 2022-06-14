@@ -4,10 +4,10 @@
     <ul class="verti-timeline list-unstyled">
       <HistoricalEntry
         v-for="historicalEntry in historicalEntries"
-        :key="historicalEntry.historicalEntryId"
+        :key="historicalEntry.id"
         :changeDate="historicalEntry.changeDate"
         :status="historicalEntry.status"
-        :active="recentHistoricalEntryId === historicalEntry.historicalEntryId"
+        :active="recentHistoricalEntryId === historicalEntry.id"
       ></HistoricalEntry>
     </ul>
   </div>

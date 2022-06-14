@@ -102,7 +102,7 @@ export default {
                 <Status :status="valuationInformation.status"></Status>
               </h4>
               <h4 class="float-end font-size-16">
-                Identifier: <b>{{ valuationInformation.valuationId }}</b>
+                Identifier: <b>{{ valuationInformation.id }}</b>
               </h4>
               <div class="mb-4">
                 <img

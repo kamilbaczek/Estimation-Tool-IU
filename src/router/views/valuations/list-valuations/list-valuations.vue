@@ -66,28 +66,39 @@ export default {
   },
   mounted() {
     this.totalRows = this.items.length;
-    axios
-      .get("valuations-module/Valuations")
-      .then((res) => {
-        const data = res.data.valuations;
-        this.loadPriorities(data);
+    this.getValuations();
+    function valuationsHub() {
+      this.$valuationsHub.$on("valuation-requested-event", () => {
+        this.getValuations();
       });
+    }
+    valuationsHub.call(this);
   },
   methods: {
     goToDetails(id) {
       this.$router.push({ name: "details-valuation", params: { id: id } });
     },
+    getValuations()
+    {
+      axios
+          .get("valuations-module/Valuations")
+          .then((res) => {
+            const data = res.data.valuations;
+            this.loadPriorities(data);
+          });
+    },
     loadPriorities(valuations) {
     axios
       .get("priorities-module/Priorities").then((res) => {
       valuations.forEach((valuation) => {
-      let priority = res.data.priorities.find(priority => priority.valuationId === valuation.valuationId);
+      let priority = res.data.priorities.find(priority => priority.valuationId === valuation.id);
         valuation.priority = priority?.level ?? "";
     });
 
     this.tableData = valuations;
   });
-}
+},
+
   },
 };
 </script>
@@ -105,7 +116,7 @@ export default {
     >
       <template v-slot:actions="data">
         <b-button
-          @click.prevent="goToDetails(data.item.valuationId)"
+          @click.prevent="goToDetails(data.item.id)"
           variant="info"
           class="mx-auto"
           title="Go to details"
