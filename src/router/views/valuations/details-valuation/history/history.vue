@@ -35,11 +35,12 @@ export default {
   },
 
   mounted() {
+    this.getHistory();
     function valuationsHub() {
       this.$valuationsHub.$on("valuation-requested-event", () => {
         this.getHistory();
       });
-      
+
       this.$valuationsHub.$on("proposal-approved-event", () => {
         this.getHistory();
       });
